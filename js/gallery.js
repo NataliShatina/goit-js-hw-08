@@ -83,29 +83,22 @@ const galleryMarkup = images
   })
   .join("");
 
-// Додаємо розмітку у контейнер
-galleryContainer.innerHTML = galleryMarkup;
+galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup);
 
-// Забороняємо стандартну поведінку кліку на посилання
 galleryContainer.addEventListener("click", (event) => {
-  if (event.target.nodeName !== "IMG") return; // реагуємо лише на клік по зображенню
   event.preventDefault();
 
-  const largeImageUrl = event.target.dataset.source;
-  console.log("URL великого зображення:", largeImageUrl);
-  // Тут можна додати відкриття модального вікна або інші дії
-});
+  const clickedImg = event.target;
 
-galleryContainer.addEventListener("click", (event) => {
-  event.preventDefault(); // забороняємо стандартну поведінку посилання
-
-  const clickedImg = event.target; // елемент, на який клікнули
-
-  // Перевіряємо, що клік був по <img>
   if (clickedImg.nodeName !== "IMG") return;
 
-  // Отримуємо URL великого зображення з data-атрибуту
   const largeImageUrl = clickedImg.dataset.source;
 
-  console.log(largeImageUrl); // виводимо у консоль
+  const instance = basicLightbox.create(`
+    <div class="modal">
+      <img src="${largeImageUrl}" alt="${clickedImg.alt}" />
+    </div>
+  `);
+
+  instance.show();
 });
